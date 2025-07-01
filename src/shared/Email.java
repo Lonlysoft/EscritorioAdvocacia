@@ -4,7 +4,8 @@ import exceptions.EmailException;
 
 public class Email {
 	private final String value;
-	private final String pattern = "";
+	private final String receptor;
+	
 	public Email(String value) throws EmailException {
 		this.validate(value);
 		this.value = value;
@@ -13,6 +14,7 @@ public class Email {
 		if(value == null || value.isBlank()) {
 			throw new EmailException("Email não declarado");
 		}
+		
 	}
 	public String getValue() {
 		return value;
