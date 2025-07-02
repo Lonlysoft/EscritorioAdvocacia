@@ -12,8 +12,11 @@ import controllers.MainController;
 public class MenuView extends JFrame {
 	
 	private static final long serialVersionUID = -6778634079898677280L;
-
+	
+	
 	private JButton btnTribunal;
+	private JButton btnProcesso;
+	private JButton btnAdvogado;
 	
 	public MenuView() {
 		initialize();
@@ -34,7 +37,8 @@ public class MenuView extends JFrame {
 				actionTribunal();
 			}
 		});
-		
+		btnProcesso = new JButton("Processos");
+		btnAdvogado = new JButton("advogados");
 		this.add(btnTribunal);
 	}
 	

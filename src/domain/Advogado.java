@@ -2,7 +2,7 @@ package domain;
 
 import contracts.IPessoa;
 
-public class Advogado implements IPessoa{
+public class Advogado implements IPessoa, Serializable{
 	private final PessoaFisica pessoaFisica;
 	private final String registro;
 

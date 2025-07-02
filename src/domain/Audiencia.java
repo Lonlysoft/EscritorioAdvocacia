@@ -6,7 +6,7 @@ public class Audiencia {
 	private final String recomendacao;
 	private final Advogado advogado;
 
-	public Audiencia(Date data, String recomendacao, Advogado advogado) {
+	public Audiencia(Date data, String recomendacao, Advogado advogado) implements Serializable{
 		this.advogado = advogado;
 		this.data = data;
 		this.recomendacao = recomendacao;

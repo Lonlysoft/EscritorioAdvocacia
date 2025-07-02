@@ -1,6 +1,6 @@
 package domain;
 
-public class Tribunal extends Serializer{
+public class Tribunal implements Serializable{
 	private final String sigla;
 	private final String nome;
 	private final String secao;

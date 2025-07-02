@@ -4,7 +4,9 @@ public class PessoaFisicaDto {
 	private String nome;
 	private String email;
 	private String telefone;
-	private final String cpf;
+	private String cpf;
+	
+	public PessoaFisicaDto(){}
 
 	public PessoaFisicaDto(String nome, String email, String telefone, String cpf) {
 		this.email = email;

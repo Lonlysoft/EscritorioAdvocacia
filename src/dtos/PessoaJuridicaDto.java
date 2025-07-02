@@ -1,17 +1,19 @@
 package dtos;
 
 public class PessoaJuridicaDto {
-	private final String cnpj;
-	private PessoaFisica preposto;
+	private String cnpj;
+	private String cpfPreposto;
 	private String nome;
 	private String email;
 	private String telefone;
 	private final String cpf;
 
-	public PessoaJuridicaDto(String nome, String email, String telefone, String cnpj, PessoaFisica preposto){
-		PessoaFisica = preposto;
+	public PessoaJuridicaDto(String nome, String email, String telefone, String cnpj, String cpfPreposto){
+		this.email = email;
+		this.nome = nome;
+		this.telefone = telefone;
 		this.cnpj = cnpj;
-		this.preposto = preposto;
+		this.cpfPreposto = cpfPreposto;
 	}
 
 	public void setPreposto(PessoaFisicaDto preposto) {

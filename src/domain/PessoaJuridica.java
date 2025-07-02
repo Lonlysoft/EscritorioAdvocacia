@@ -13,10 +13,11 @@ public class PessoaJuridica extends Pessoa, Serializer {
 		super(nome, email, telefone);
 		
 		this.cnpj = cnpj;
-		this.preposto = preposto;
+		setPreposto(preposto);
 	}
 
-	public void setPreposto(PessoaFisica preposto) {
+	public void setPreposto(PessoaFisica preposto) throws PessoaException{
+		if(preposto == null) throw new PessoaException("necessária ter uma pessoa física para o preposto");
 		this.preposto = preposto;
 	}
 

@@ -5,7 +5,7 @@ import java.util.Date;
 import contracts.IPessoa;
 import enumerations.EFaseProcesso;
 
-public class Processo extends Serializer{
+public class Processo implements Serializable{
 	private final long numero;
 	private final Date dataAbertura;
 	private final Tribunal tribunal;

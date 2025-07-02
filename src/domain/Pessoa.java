@@ -4,7 +4,7 @@ import contracts.IPessoa;
 import exceptions.PessoaException;
 import shared.Email;
 
-public abstract class Pessoa implements IPessoa {
+public abstract class Pessoa implements IPessoa, Serializable{
 	
 	private String nome;
 	private Email email;

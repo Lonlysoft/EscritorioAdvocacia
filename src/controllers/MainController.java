@@ -13,36 +13,27 @@ public class MainController implements Serializable {
 
 	private static MainController instance;
 	
-	private TribunalController tribunalController;
+	private static TribunalController tribunalController;
 	
-	private ProcessoController processoController;
+	private static ProcessoController processoController;
 	
-	private PessoaFisicaController pessoaFisicaController;
+	private static PessoaFisicaController pessoaFisicaController;
 	
-	private PessoaJuridicaController pessoaJuridicaController;
+	private static PessoaJuridicaController pessoaJuridicaController;
 	
-	private AdvogadoController advogadoController;
+	private static AdvogadoController advogadoController;
 	
-	private DespesaController despesaController;
+	private static DespesaController despesaController;
 	
-	private ProcessoController processoController;
+	private static ProcessoController processoController;
 	
 	
 	private MainController() {
 		
 		tribunalController = new TribunalController();
-		
 		processoController = new ProcessoController();
+		pessoaController = new PessoaController();
 		
-		pessoaFisicaController = new PessoaFisicaController();
-		
-		pessoaJuridicaController = new PessoaJuridicaController();
-		
-		advogadoController = new AdvogadoController();
-		
-		despesaController = new DespesaController();
-		
-		processoController = new ProcessoController();
 	}
 
 	public static MainController getInstance() {

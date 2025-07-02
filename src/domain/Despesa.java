@@ -6,7 +6,7 @@ public class Despesa {
 	private final String descricao;
 	private final double valor;
 
-	public Despesa(Date data, String descricao, double valor) {
+	public Despesa(Date data, String descricao, double valor) implements Serializable{
 		this.data = data;
 		this.descricao = descricao;
 		this.valor = valor;
