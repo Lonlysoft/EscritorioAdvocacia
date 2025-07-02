@@ -9,7 +9,7 @@ public class PessoaJuridica extends Pessoa, Serializer {
 	private final Cnpj cnpj;
 	private PessoaFisica preposto;
 
-	public PessoaJuridica(String nome, Email email, Telefone telefone, Cnpj cnpj, PessoaFisica preposto) throws PessoaException {
+	public PessoaJuridica(String nome, Email email, String telefone, Cnpj cnpj, PessoaFisica preposto) throws PessoaException {
 		super(nome, email, telefone);
 		
 		this.cnpj = cnpj;

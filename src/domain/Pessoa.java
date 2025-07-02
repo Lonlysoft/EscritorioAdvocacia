@@ -3,13 +3,12 @@ package domain;
 import contracts.IPessoa;
 import exceptions.PessoaException;
 import shared.Email;
-import shared.Telefone;
 
 public abstract class Pessoa implements IPessoa {
 	
 	private String nome;
 	private Email email;
-	private Telefone telefone;
+	private String telefone;
 
 	public Pessoa(String nome, Email email, Telefone telefone) throws PessoaException{
 		
@@ -44,7 +43,7 @@ public abstract class Pessoa implements IPessoa {
 		this.email = email;
 	}
 
-	public void setTelefone(Telefone telefone) {
+	public void setTelefone(String telefone) {
 		this.telefone = telefone;
 	}
 

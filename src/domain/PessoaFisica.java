@@ -8,7 +8,7 @@ import shared.Telefone;
 public class PessoaFisica extends Pessoa {
 	private final Cpf cpf;
 
-	public PessoaFisica(String nome, Email email, Telefone telefone, Cpf cpf) throws PessoaException {
+	public PessoaFisica(String nome, Email email, String telefone, Cpf cpf) throws PessoaException {
 		super(nome, email, telefone);
 		this.cpf = cpf;
 	}
