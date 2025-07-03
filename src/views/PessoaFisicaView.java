@@ -17,14 +17,28 @@ public class PessoaFisicaView extends JFrame {
 
 	private JLabel lblCpf;
 	private JTextField txtCpf;
+	
+	private JButton btnBuscarCpf;
 
 	private JLabel lblEmail;
 	private JTextField txtEmail;
 
 	private JLabel lblTel;
 	private JTextField txtTelefone;
+	
+	private JButton btnSalvar;
+	private JButton btnCancelar;
 
-	public PessoaFisicaView() {
-		this.pessoaFisicaController = new PessoaFisicaController();
+	public PessoaFisicaView(PessoaFisicaController pfc) {
+		this.pessoaFisicaController = pfc;
+		initialize();
+	}
+	private initialize(){
+		this.setTitle("nova Pessoa Fisica");
+		this.setSize(200, 300);
+		this.setLayout();
+		
+		this.lblCpf = new JLabel("CPF:");
+		
 	}
 }

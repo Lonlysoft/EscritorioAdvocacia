@@ -24,22 +24,31 @@ public class MenuView extends JFrame {
 	
 	private void initialize() {
 		
-		this.setTitle("Sistem de Gestão de Processos");
+		this.setTitle("Sistema de Gestão de Processos");
 		this.setSize(500, 400);
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		this.setLayout(new GridLayout(3, 1));
 		
-		btnTribunal = new JButton("Cadastro de Tribunais");
+		btnTribunal = new JButton("Tribunais");
 		btnTribunal.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionTribunal();
 			}
 		});
 		btnProcesso = new JButton("Processos");
+		btnProcesso.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(ActionEvent e){
+					actionProcesso();
+				}
+			}
+		);
 		btnAdvogado = new JButton("advogados");
 		this.add(btnTribunal);
+		this.add(btnProcesso);
+		this.add(btnAdvogado);
 	}
 	
 	private void actionTribunal() {
@@ -47,4 +56,9 @@ public class MenuView extends JFrame {
 		TribunalView tribunalView = new TribunalView(MainController.getTribunalController());
 		tribunalView.setVisible(true);
 	}	
+	
+	private void actionProcesso(){
+		ProcessoView pv = new ProcessoView(MainController.getProcessoController());
+		pv.setVisible(true);
+	}
 }
