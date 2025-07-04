@@ -1,12 +1,12 @@
 package dtos;
 
+import exceptions.PessoaException;
+
 public class PessoaFisicaDto {
 	private String nome;
 	private String email;
 	private String telefone;
-	private String cpf;
-	
-	public PessoaFisicaDto(){}
+	private final String cpf;
 
 	public PessoaFisicaDto(String nome, String email, String telefone, String cpf) {
 		this.email = email;
