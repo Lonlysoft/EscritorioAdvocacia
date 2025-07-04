@@ -14,7 +14,7 @@ public class ProcessoController implements Serializable {
 
 	private static final long serialVersionUID = -4125026648925415158L;
 	
-	private Map<String, Processo> processos;
+	private Map<long, Processo> processos;
 
 	protected ProcessoController() {
 		processos = new TreeMap<>();
@@ -22,26 +22,26 @@ public class ProcessoController implements Serializable {
 
 	public void createProcesso(ProcessoDto pDto) throws ProcessoException {
 
-		if (processos.get(pDto.getSigla()) != null) {
-			throw new ProcessoException("Já existe Processo cadastrado para a sigla: " + ProcessoDto.getSigla());
+		if (processos.get(pDto.getNumero()) != null) {
+			throw new ProcessoException("Já existe Processo cadastrado para o Numero: " + ProcessoDto.getNumero());
 		}
 
-		Processo t = new Processo(pDto.getSigla(), pDto.getNome(), pDto.getSecao());
+		Processo t = new Processo(pDto.getNumero(), pDto.getDataAbertura(), pDto.getFase());
 
-		processos.put(t.getSigla(), t);
+		processos.put(t.getNumero(), t);
 		
 		MainController.save();
 	}
 
 	public void updateProcesso(ProcessoDto ProcessoDto) throws ProcessoException {
 
-		Processo p = processos.get(ProcessoDto.getSigla());
+		Processo p = processos.get(ProcessoDto.getNumero());
 
 		if (p == null)
-			throw new ProcessoException("Não tem Processo cadastrado para a sigla: " + ProcessoDto.getSigla());
+			throw new ProcessoException("Não tem Processo cadastrado para o Numero: " + ProcessoDto.getNumero());
 
-		p.setNome(p.getNome());
-		p.setSecao(p.getSecao());
+		p.setNumero(p.getNumero());
+		p.setData(new Date(p.getData()));
 		
 		MainController.save();
 	}
