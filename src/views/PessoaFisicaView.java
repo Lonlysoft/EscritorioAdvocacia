@@ -57,6 +57,15 @@ public class PessoaFisicaView extends JFrame {
 		this.lblCpf = new JLabel("CPF");
 		this.txtCpf = new JTextField(12);
 		this.btnBuscarCpf = new JButton("buscar");
+		
+		btnBuscarCpf.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionBuscar();
+				}
+			}
+		);
+		
 		this.pnlCpfBuscar = new JPanel();
 		this.pnlCpfBuscar.setLayout(new FlowLayout());
 
@@ -93,15 +102,40 @@ public class PessoaFisicaView extends JFrame {
 		this.pnlFooterContainer.add(this.btnCancelar);
 		this.pnlFooterContainer.add(this.btnSalvar);
 		
+		this.pnlTxtFields = new JPanel();
+		
 		this.pnlTxtFields.add(pnlNomeContainer);
 		this.pnlTxtFields.add(pnlEmailContainer);
 		this.pnlTxtFields.add(pnlTelefoneContainer);
 		
-
 		this.add(pnlCpfBuscar);
 		this.add(pnlTxtFields);
-//		this.add(pnlPessoaFisicaTxtFields);
-//		this.add(pnlPessoaFisicaFinalComplex);
-
+		this.add(pnlFooterContainer);
 	}
+	
+	private void actionRegistrar(){
+		
+	}
+	
+	private void actionBuscar() {
+
+		String cpf;
+		PessoaFisicaDto dto;
+		
+		cpf = txtCpf.getText();
+		
+		try {
+			dto = PessoaController.getPessoaFisica(cpf);
+			
+			txtCpf.setText(sigla);
+			txtNome.setText(dto.getNome());
+			txtTelefone.setText(dto.getTelefone());
+			txtEmail.setText(dto.getEmail());
+			
+		} catch (PessoaException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			clear();
+		}	
+	}
+	
 }

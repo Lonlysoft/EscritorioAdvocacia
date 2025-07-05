@@ -5,5 +5,4 @@ public interface IPessoa {
 	public String getEmail();
 	public String getTelefone();
 	public String getCadastroRF();
-	public String list();
 }
