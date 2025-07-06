@@ -1,22 +1,45 @@
 package shared;
 
-import exceptions.EmailException;
+import exceptions.EmailInvalidoException;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
-public class Email {
+public final class Email {
 	private final String value;
-	private final String receptor;
 	
+	private static final Pattern EMAIL_PATTERN = Pattern.compile(
+		"^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +
+		"(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$"
+	);
+
 	public Email(String value) throws EmailException {
-		this.validate(value);
-		this.value = value;
+		if (!validarEmail(value)) {
+			throw new EmailException("Endereço de e-mail inválido: " + value);
+		}
+		this.value = value.toLowerCase();
 	}
-	private void validate(String value) throws EmailException{
-		if(value == null || value.isBlank()) {
-			throw new EmailException("Email não declarado");
+
+	public static boolean validarEmail(String email) {
+		if (email == null || email.isBlank()) {
+			return false;
 		}
 		
+		if (email.length() > 254) {
+			return false;
+		}
+		
+		return EMAIL_PATTERN.matcher(email).matches();
 	}
+
 	public String getValue() {
 		return value;
+	}
+
+	public String getUsuario() {
+		return value.split("@")[0];
+	}
+
+	public String getDominio() {
+		return value.split("@")[1];
 	}
 }

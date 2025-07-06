@@ -112,26 +112,29 @@ public class PessoaController implements Serializable {
 		MainController.save();
 	}
 
-	public PessoaJuridicaDto getPessoaJuridica(String Cnpj) throws PessoaException{
+	public PessoaJuridicaDto getPessoaJuridica(String cnpj) throws PessoaException{
 
-		PessoaJuridica pessoa = pessoasJuridicas.get(Cnpj);
+		PessoaJuridica pessoa = pessoasJuridicas.get(cnpj);
 
 		if (pessoa == null)
-			throw new PessoaException("Não tem pessoa cadastrado para o Cnpj: " + Cnpj);
+			throw new PessoaException("Não tem pessoa cadastrado para o Cnpj: " + cnpj);
 
 		PessoaJuridicaDto pessoaDto = new PessoaJuridicaDto(pessoa.getNome(), pessoa.getEmail(), pessoa.getTelefone(), pessoa.getCnpj(), pessoa.getPreposto().getCpf());
 
 		return pessoaDto;
 	}
 	
+	public void removePessoaJuridica(String cnpj){
+		this.pessoasJuridicas.remove(cnpj);
+	}
+	
 	public List<PessoaJuridicaDto> getpessoasJuridicas() {
-
 		List<PessoaJuridicaDto> lista = new ArrayList<>();
 
 		PessoaJuridicaDto pjDto;
 
 		for (PessoaJuridica pj : pessoasJuridicas.values()) {
-			pjDto = new PessoaJuridicaDto(pj.getNome(), pj.getEmail(), pj.getTelefone(), pj.getCadastroRF());
+			pjDto = new PessoaJuridicaDto(pj.getNome(), pj.getEmail(), pj.getTelefone(), pj.getCadastroRF(), pj.getPreposto().getCpf);
 			lista.add(pjDto);
 		}
 

@@ -74,13 +74,13 @@ public class PessoaFisicaView extends JFrame {
 		this.pnlCpfBuscar.add(this.btnBuscarCpf);
 
 		this.lblNome = new JLabel("Nome");
-		this.txtNome = new JTextField();
+		this.txtNome = new JTextField(40);
 
 		this.lblEmail = new JLabel("Email");
-		this.txtEmail = new JTextField();
+		this.txtEmail = new JTextField(40);
 
 		this.lblTelefone = new JLabel("Telefone");
-		this.txtTelefone = new JTextField();
+		this.txtTelefone = new JTextField(12);
 
 		this.pnlNomeContainer = new JPanel();
 
@@ -104,17 +104,30 @@ public class PessoaFisicaView extends JFrame {
 		
 		this.pnlTxtFields = new JPanel();
 		
-		this.pnlTxtFields.add(pnlNomeContainer);
-		this.pnlTxtFields.add(pnlEmailContainer);
-		this.pnlTxtFields.add(pnlTelefoneContainer);
+		this.pnlTxtFields.add(this.pnlNomeContainer);
+		this.pnlTxtFields.add(this.pnlEmailContainer);
+		this.pnlTxtFields.add(this.pnlTelefoneContainer);
 		
-		this.add(pnlCpfBuscar);
-		this.add(pnlTxtFields);
-		this.add(pnlFooterContainer);
+		this.add(this.pnlCpfBuscar);
+		this.add(this.pnlTxtFields);
+		this.add(this.pnlFooterContainer);
 	}
 	
 	private void actionRegistrar(){
+		PessoaFisicaDto dto = new PessoaFisicaDto(
+			this.txtNome.getText(),
+			this.txtTelefone.getText(),
+			this.txtEmail.getText(),
+			this.txtCpf.getText()
+		);
 		
+		try{
+			this.pessoaFisicaController.createPessoaFisica(dto);
+			JOptionPane.showMessageDialog(this, "Pessoa Fisica gravada com sucesso!");
+		} catch(PessoaException e){
+			JWarningPane.showMessageDialog(this, e.getMessage());
+			this.clear();
+		}
 	}
 	
 	private void actionBuscar() {
@@ -125,17 +138,24 @@ public class PessoaFisicaView extends JFrame {
 		cpf = txtCpf.getText();
 		
 		try {
-			dto = PessoaController.getPessoaFisica(cpf);
+			dto = this.pessoaFisicaController.getPessoaFisica(cpf);
 			
-			txtCpf.setText(sigla);
+			txtCpf.setText(cpf);
 			txtNome.setText(dto.getNome());
 			txtTelefone.setText(dto.getTelefone());
 			txtEmail.setText(dto.getEmail());
 			
 		} catch (PessoaException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
-			clear();
+			//clear();
 		}	
+	}
+	
+	public void clear(){
+		this.txtNome.setText("");
+		this.txtCpf.setText("");
+		this.txtTelefone.setText("");
+		this.txtEmail.setText("");
 	}
 	
 }
