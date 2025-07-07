@@ -5,8 +5,8 @@ import java.util.Date;
 import contracts.IPessoa;
 import enumerations.EFaseProcesso;
 
-public class Processo implements Serializable{
-	private final long numero;
+public class Processo implements IPessoa, Serializable{
+	private final String numero;
 	private final Date dataAbertura;
 	private final Tribunal tribunal;
 	private EFaseProcesso fase;
@@ -14,13 +14,23 @@ public class Processo implements Serializable{
 	private final ArrayList<Despesa> custas = new ArrayList<Despesa>();
 	private final IPessoa cliente, parteContraria;
 
-	public Processo(long numero, Date dataAbertura, Tribunal tribunal, EFaseProcesso fase, IPessoa cliente,
-			IPessoa parteContraria) {
+	public Processo(String numero, Date dataAbertura, Tribunal tribunal, EFaseProcesso fase, IPessoa cliente,
+			IPessoa parteContraria) throws ProcessoException{
 		this.numero = numero;
 		this.dataAbertura = dataAbertura;
+		if(tribunal == null){
+			throw new ProcessoException("tribunal deve ser declarado");
+		}
 		this.tribunal = tribunal;
 		this.fase = fase;
+		
+		if(cliente == null){
+			throw new ProcessoException("Cliente não declarado");
+		}
 		this.cliente = cliente;
+		if(parteContraria == null){
+			throw new ProcessoException("Parte Contraria não declarada");
+		}
 		this.parteContraria = parteContraria;
 	}
 

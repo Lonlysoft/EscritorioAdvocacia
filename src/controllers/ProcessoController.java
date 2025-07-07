@@ -26,12 +26,28 @@ public class ProcessoController implements Serializable {
 		if (processos.get(pDto.getNumero()) != null) {
 			throw new ProcessoException("Já existe Processo cadastrado para o Numero: " + pDto.getNumero());
 		}
+		
+		PessoaController pc = MainController.getPessoaController();
+		
+		TribunalController tc = MainController.getTribunalController();
+		PessoaFisicaDto clientePf = null;
+		PessoaJuridicaDto clientePj = null;
+		clientePf = pc.getPessoaFisica(pDto.getCadastroRF());
+		clientePj = pc.getPessoaJuridica(pDto.getCadastroRF());
+		
+		parteContrariaPf = pc.getPessoaFisica(pDto.getCadastroParteContraria());
+		parteContrariaPj = pc.getPessoaJuridica(pDto.getCadastroParteContraria());
 
-		Processo t = new Processo(pDto.getNumero(), pDto.getDataAbertura() pDto.getFase(), );
+		Processo p = new Processo(pDto.getNumero(), pDto.getDataAbertura(), pDto.getFase(), (clientePf == null)? clientePj : clientePf, (parteContrariaPf == null)? parteContrariaPj : parteContrariaPf);
 
-		processos.put(t.getNumero(), t);
+		processos.put(p.getNumero(), p);
 
 		MainController.save();
+	}
+	
+	public void addAudienciaToProcesso(String numProcesso, AudienciaDto audienciaDto){
+		Processo p = processos.get(numProcesso);
+		p.addAudiencia(audienciaDto.getData(), audienciaDto.getRecomendacao(), /*como eu posso adicionar um advogado aqui???*/);
 	}
 
 	public void updateProcesso(ProcessoDto ProcessoDto) throws ProcessoException {

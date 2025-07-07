@@ -42,4 +42,8 @@ public class PessoaFisicaDto {
 	public String getCpf() {
 		return cpf;
 	}
+	
+	public String getCadastroRF() {
+		return cpf;
+	}
 }
