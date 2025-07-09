@@ -72,14 +72,19 @@ public class PessoaFisicaView extends JFrame {
 		this.pnlCpfBuscar.add(this.lblCpf);
 		this.pnlCpfBuscar.add(this.txtCpf);
 		this.pnlCpfBuscar.add(this.btnBuscarCpf);
+		
+		int universalWidth = 30;
 
 		this.lblNome = new JLabel("Nome");
+		this.lblNome.setSize(universalWidth, 16);
 		this.txtNome = new JTextField(40);
 
 		this.lblEmail = new JLabel("Email");
+		this.lblEmail.setSize(universalWidth, 16);
 		this.txtEmail = new JTextField(40);
 
 		this.lblTelefone = new JLabel("Telefone");
+		this.lblTelefone.setSize(universalWidth, 16);
 		this.txtTelefone = new JTextField(12);
 
 		this.pnlNomeContainer = new JPanel();

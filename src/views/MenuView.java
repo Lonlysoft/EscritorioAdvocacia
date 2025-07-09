@@ -66,17 +66,13 @@ public class MenuView extends JFrame {
 		TribunalView tribunalView = new TribunalView(MainController.getTribunalController());
 		tribunalView.setVisible(true);
 	}	
-//	
-//	private void actionProcesso(){
-//		ProcessoView pv = new ProcessoView(MainController.getProcessoController());
-//		pv.setVisible(true);
-//	}
-//	
+	private void actionProcesso(){
+		ProcessoView pv = new ProcessoView(MainController.getProcessoController());
+		pv.setVisible(true);
+	}
 	
 	private void actionPessoa(){
 		PessoaFisicaView pv = new PessoaFisicaView(MainController.getPessoaController());
 		pv.setVisible(true);
 	}
-	
-	
 }

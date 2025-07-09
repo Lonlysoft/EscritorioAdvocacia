@@ -68,10 +68,6 @@ public class PessoaController implements Serializable {
 		return pessoaDto;
 	}
 	
-	public void createAdvogado(){
-		
-	}
-
 	public List<PessoaFisicaDto> getpessoasFisicas() {
 
 		List<PessoaFisicaDto> lista = new ArrayList<>();
@@ -81,6 +77,66 @@ public class PessoaController implements Serializable {
 		for (PessoaFisica pf : pessoasFisicas.values()) {
 			pfDto = new PessoaFisicaDto(pf.getNome(), pf.getEmail(), pf.getTelefone(), pf.getCadastroRF());
 			lista.add(pfDto);
+		}
+
+		return lista;
+	}
+	
+	public void removePessoaFisica(String cnpj){
+		this.pessoasJuridicas.remove(cnpj);
+	}
+	
+	public void createAdvogado(AdvogadoDto advDto) throws PessoaException, CpfException, EmailException {
+
+		if (advogados.get(advDto.getRegistro()) != null) {
+			throw new PessoaException("Já existe pessoa cadastrado para o registro: " + advDto.getRegistro());
+		}
+		
+		PessoaFisica pf = pessoasFisicas.get(advDto.getRegistro());
+
+		Advogado adv = new Advogado(advDto.getNome(), pf);
+
+		advogados.put(adv.getCpf(), adv);
+		
+		MainController.save();
+	}
+
+	public void updateAdvogado(AdvogadoDto advDto) throws PessoaException, EmailException {
+
+		Advogado adv = advogados.get(advDto.getRegistro());
+		
+		PessoaFisica pf = pessoasFisicas.get(adv.getRegistroRF());
+		if (adv == null || pf == null)
+			throw new PessoaException("Não tem advogado cadastrado para o Registro: " + advDto.getRegistro());
+		
+		pf.setNome(advDto.getNome());
+		pf.setEmail(advDto.getEmail());
+		pf.setEmail(advDto.getEmail());
+		
+		MainController.save();
+	}
+
+	public AdvogadoDto getAdvogado(String registro) throws PessoaException{
+
+		Advogado pessoa = advogados.get(registro);
+
+		if (pessoa == null)
+			throw new PessoaException("Não tem advogado cadastrado para o registro: " + registro);
+
+		AdvogadoDto advogadoDto = new AdvogadoDto();
+
+		return advogadoDto;
+	}
+	
+	public List<AdvogadoDto> getadvogados() {
+
+		List<AdvogadoDto> lista = new ArrayList<>();
+
+		AdvogadoDto advDto;
+
+		for (Advogado adv : advogados.values()) {
+			advDto = new AdvogadoDto(adv.getNome(), adv.getEmail(), adv.getTelefone(), adv.getCadastroRF());
+			lista.add(advDto);
 		}
 
 		return lista;
