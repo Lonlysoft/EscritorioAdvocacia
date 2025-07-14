@@ -17,16 +17,7 @@ public class MainController implements Serializable {
 	
 	private static ProcessoController processoController;
 	
-	private static PessoaFisicaController pessoaFisicaController;
-	
-	private static PessoaJuridicaController pessoaJuridicaController;
-	
-	private static AdvogadoController advogadoController;
-	
-	private static DespesaController despesaController;
-	
-	private static ProcessoController processoController;
-	
+	private static PessoaController pessoaController;
 	
 	private MainController() {
 		

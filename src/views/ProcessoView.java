@@ -1,18 +1,32 @@
+package views;
+
 class ProcessoView extends JFrame{
+	private ProcessoController processoContolroller;
+	private ArrayList<AudienciaDto> audienciaHandler = new ArrayList<>();
+	private ArrayList<DespesaDto> despesaHandler = new ArrayList<>();
+	
 	private JPanel pnlContainer;
 	private JPanel pnlFooterContainer;
 	
 	private JPanel pnlNumeroBuscar;
 	private JLabel lblNumero;
 	private JTextField txtNumero;
-	private JButton btnNumero;
+	private JButton btnNumeroBuscar;
 	
 	private JPanel pnlTxtFields;
 	
 	//inicio container formulario
+	private JPanel pnlTribunal
+	private JLabel lblTribunal
+	private JTextField txtTribunal
+	private JButton btnTribunalBuscar
+	
 	private JPanel pnlFaseContainer;
 	private JLabel lblFase;
 	private JComboBox ddmFase;
+	private String[4] dropdownOptions = {
+		"INICIAL", "INSTRUÇÃO", "DECISÃO", "RECURSO"
+	};
 	
 	private JPanel pnlDataContainer;
 	private JLabel lblData;
@@ -28,11 +42,22 @@ class ProcessoView extends JFrame{
 	private JTextField txtRegistroParteContraria;
 	private JButton btnRegistroParteContraria;
 	
+	private JTextArea txtAudienciasLista;
+	
+	private JPanel pnlAudiencia;
+	private JButton AddAud;
+	private JButton resetAllAud;
+	
+	private JPanel pnlDespesa;
+	private JButton AddDes;
+	private JButton resetAllDes;
+	
+	
 	//fim formulario principal
 	
-	private String[] dropdownOptions = {
-		"INICIAL", "INSTRUÇÃO", "DECISÃO", "RECURSO"
-	};
+	private JButton btnSalvar;
+	private JButton btnRemover;
+	private JButton btnListar;
 	
 	public ProcessoView(){
 	  initialize();
@@ -40,26 +65,188 @@ class ProcessoView extends JFrame{
 	
 	private void initialize(){
 		this.setSize(250, 500);
-		this.setLayout(new GridLayout(4, 1));
-		pnlNumeroBuscar = new JPanel();
-		pnlNumeroBuscar.setLayout(new FlowLayout());
+		this.setMinimunSize(new Dimension(125, 250));
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		
+		this.setLayout(new BorderLayout());
 		lblNumero = new JLabel("número do Processo: ");
 		txtNumero = new JTextField(11);
-		pnlNumeroBuscar.add(lblNumero);
+		btnNumeroBuscar = new JButton("buscar");
+		
+		
+		btnNumeroBuscar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionBuscar();
+			}
+		});
+		
+		btnSalvar = new JButton("Salvar");
+		btnSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionSalvar();
+			}
+		});
+		
+		btnRemover = new JButton("Remover");
+		btnRemover.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionRemover();
+			}
+		});
+		
+		btnListar = new JButton("Listar");
+		btnListar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionListar();
+			}
+		});
+		
+		btnRegistroCliente = new JButton("buscar");
+		btnRegistroCliente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionBuscarPessoa(txtRegistroCliente.getText());
+			}
+		});
+		
+		btnRegistroParteContraria = new JButton("buscar");
+		btnRegistroParteContraria.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				actionBuscarPessoa(txtRegistroParteContraria.getText());
+			}
+		});
+		
 		pnlNumeroBuscar.add(txtNumero);
+		pnlNumeroBuscar.add(btnNumeroBuscar);
 		
 		this.pnlDataContainer = new JPanel();
 		this.pnlDataContainer.setLayout(new FlowLayout());
 		this.lblData = new JLabel("Data");
 		this.txtData = new JFormattedText("dd-mm-aaaa");
 		
-		this.pnlTxtFields.setLayout(new GridLayout(4, 1);
-		this.pnlTxtFields.add(pnlRegistroClienteBuscar);
-		this.pnlTxtFields.add(pnlRegistroParteContrariaBuscar);
-		this.pnlTxtFields.add(pnlFaseContainer);
+		this.add(lblNumero, BorderLayout.WEST);
+		this.add(lblFase, BorderLayout.WEST);
+		this.add(lblData, BorderLayout.WEST);
+		this.add(lblTribunal, BorderLayout.WEST);
+		this.add(lblRegistroCliente, BorderLayout.WEST);
+		this.add(lblRegistroParteContraria, BorderLayout.WEST);
 		
-		this.add(this.pnlCpfBuscar);
-		this.add(this.pnlTxtFields);
-		this.add(this.pnlFooterContainer);
+		this.add(pnlNumeroBuscar, BorderLayout.EAST);
+		this.add(txtFase, BorderLayout.EAST);
+		this.add(txtData, BorderLayout.EAST);
+		this.add(txtTribunal, BorderLayout.EAST);
+		this.add(pnlRegistroCliente, BorderLayout.EAST);
+		this.add(pnlRegistroParteContraria, BorderLayout.EAST);
+		
+		this.add(pnlFooterContainer, BorderLayout.SOUTH);
+	}
+	
+	private void actionBuscar(){
+		String numero;
+		ProcessoDto pDto;
+		
+		numero = txtNumero.getText();
+		
+		try{
+			dto = this.processoContolroller.getProcesso(numero);
+			txtData.setText(dto.getData());
+			ddmFase.setSelectedItem(dto.getFase());
+			txtNumero.setText(dto.getNumero());
+			txtRegistroCliente.setText(dto.getCliente());
+			txtRegistroParteContraria.setText(dto.getParteContraria());
+		}
+		catch(ProcessoException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		}
+	}
+	
+	private void actionSalvar() {
+		ProcessoDto dto;
+		try {
+			dto = new ProcessoDto();
+			dto.setNumero(txtNumero.getText());
+			dto.setFase(ddmFase.getSelectedItem().toString());
+			dto.setData(txtData.getText());
+			dto.setClienteRegistro(txtRegistroCliente.getText());
+			dto.setParteContrariaRegistro(txtRegistroParteContraria.getText());
+	
+			processoController.createProcesso(dto);
+			for(DespesaDto d : this.despesaHandler){
+				ProcessoController.addDespesaToProcesso(d);
+			}
+			
+			for(AudienciaDto d : this.audienciaHandler){
+				ProcessoController.addAudienciaToProcesso(d);
+			}
+			
+			JOptionPane.showMessageDialog(this, "Processo salvo com sucesso.");
+			clearInputs();
+		} catch (ProcessoException e) {
+			JOptionPane.showMessageDialog(this, "Erro ao salvar processo: " + e.getMessage());
+		}
+	}
+	
+	private void actionRemover() {
+		String numero = txtNumero.getText();
+		ProcessoDto processo;
+		try{
+			processo = processoController.getProcesso(numero);
+			processoController.removeProcesso(numero);
+			JOptionPane.showMessageDialog(this, "Processo removido.");
+		} catch(ProcessoException e) {
+			JOptionPane.showMessageDialog(this, "Processo não encontrado.");
+		}
+	}
+	
+	private void actionListar() {
+		List<ProcessoDto> lista = processoController.list();
+		StringBuilder builder = new StringBuilder();
+		for (ProcessoDto dto : lista) {
+			builder.append(dto.toString()).append("\n");
+		}
+	}
+	
+	private void actionBuscarPessoa(String registro) {
+		PessoaDto pessoa = pessoaController.getPessoa(registro);
+		if (pessoa != null) {
+			
+		} else {
+			
+		}
+	}
+	
+	private void actionAdicionarDespesa(){
+		DespesaDto dto = new DespesaDto();
+		this.despesaHandler.add()
+	}
+	
+	private void actionAdicionarAudiencia(){
+		AudienciaDto dto = new AudienciaDto();
+		this.AudienciaHandler.add()
+	}
+	
+	private void actionBuscarCliente(){
+		try{
+			
+		}
+	}
+	
+	private void actionBuscarParteContraria(){
+		
+	}
+	
+	private void clearInputs(){
+		txtData.setText("");
+		txtNumero.setText("");
+		txtTribunal.setText("");
+		txtRegistroCliente.setText("");
+		txtRegistroParteContraria.setText("");
+	}
+	
+	protected ArrayList<> getAudiencias(){
+		return this.audienciaHandler;
+	}
+	
+	protected ArrayList<> getDespesas(){
+		return this.audienciaHandler;
 	}
 }

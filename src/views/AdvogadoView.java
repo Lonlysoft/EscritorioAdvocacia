@@ -17,6 +17,7 @@ public class AdvogadoView extends JFrame {
 	private PessoaController advogadoController;
 
 	private JPanel pnlCpfBuscar;
+	private JPanel pnlRegistroBuscar;
 	private JPanel pnlTxtFields;
 	private JPanel pnlNomeContainer;
 	private JPanel pnlEmailContainer;

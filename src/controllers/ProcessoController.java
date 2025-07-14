@@ -47,7 +47,8 @@ public class ProcessoController implements Serializable {
 	
 	public void addAudienciaToProcesso(String numProcesso, AudienciaDto audienciaDto){
 		Processo p = processos.get(numProcesso);
-		p.addAudiencia(audienciaDto.getData(), audienciaDto.getRecomendacao(), /*TODO: como eu posso adicionar um advogado aqui???*/);
+		Advogado a = pessoaController.getAdvogado(audienciaDto.getAdvogado());
+		p.addAudiencia(audienciaDto.getData(), audienciaDto.getRecomendacao(), a);
 	}
 	
 	public void addDespesaToProcesso(String numero, DespesaDto dto){
@@ -80,7 +81,7 @@ public class ProcessoController implements Serializable {
 		if (p == null)
 			throw new ProcessoException("Não tem Processo cadastrado para a sigla: " + sigla);
 
-		ProcessoDto pDto = new ProcessoDto(p.getNumero(), p.getData(), p.getSiglaTribunal(), p.get);
+		ProcessoDto pDto = new ProcessoDto(p.getNumero(), p.getData(), p.getFase(), p.getSiglaTribunal(), p.getCliente(), p.getParteContraria);
 
 		return pDto;
 	}

@@ -17,7 +17,12 @@ public class MenuView extends JFrame {
 	
 	private JButton btnTribunal;
 	private JButton btnProcesso;
-	private JButton btnAdvogado;
+	private JButton btnPessoa;
+	private JToggleButton btnListas;
+	private JPanel pnlListas;
+	private JTextArea txtForLists;
+	
+	private boolean listar = false;
 	
 	public MenuView() {
 		initialize();
@@ -31,7 +36,7 @@ public class MenuView extends JFrame {
 		
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
-		this.setLayout(new GridLayout(1, 3));
+		this.setLayout(new GridLayout(2, 4));
 		
 		btnTribunal = new JButton("Tribunais");
 		btnTribunal.addActionListener(new ActionListener() {
@@ -55,24 +60,62 @@ public class MenuView extends JFrame {
 				}
 			}
 		);
+		btnListas = new JToggleButton("listar");
+		btnListas.addActionListener(
+			new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					actionToggleModoListar();
+				}
+			}
+		);
 		
 		this.add(btnTribunal);
 		this.add(btnProcesso);
 		this.add(btnAdvogado);
+		this.add(btnListas);
+		this.add(txtForLists);
 	}
 	
 	private void actionTribunal() {
+		if(!this.listar){
+			TribunalView tribunalView = new TribunalView(MainController.getTribunalController());
+			tribunalView.setVisible(true);
+		}
+		else{
 		
-		TribunalView tribunalView = new TribunalView(MainController.getTribunalController());
-		tribunalView.setVisible(true);
-	}	
+			TribunalController trc = MainController.getTribunalController();
+			List<TribunalDto> lista = trc.getTribunais();
+			txtLista.setText("");
+			for (TribunalDto dto : lista) {
+				txtForLists.append(dto.getSigla() + "\t" + dto.getNome() + "\t" + dto.getSecao()  +"\n");
+			}
+		}
+	}
 	private void actionProcesso(){
-		ProcessoView pv = new ProcessoView(MainController.getProcessoController());
-		pv.setVisible(true);
+		if(!this.listar){
+			ProcessoView pv = new ProcessoView(MainController.getProcessoController());
+			pv.setVisible(true);
+		}
+		else{
+			ProcessoController prc = MainController.getProcessoController();
+			List<ProcessoDto> lista = prc.getProcessos();
+			txtLista.setText("");
+			for (ProcessoDto dto : lista) {
+				txtForLists.append(dto.toString() +"\n");
+			}
+		}
 	}
 	
 	private void actionPessoa(){
 		PessoaFisicaView pv = new PessoaFisicaView(MainController.getPessoaController());
 		pv.setVisible(true);
+	}
+	
+	private void actionToggleModoListar(){
+		this.listar = this.btnListas.isSelected();
+		if(this.btnListas.isSelected())
+			this.btnListas.setText("modo listando");
+		else
+			this.btnListas.setText("modo registrar / alterar");
 	}
 }

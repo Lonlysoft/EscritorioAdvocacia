@@ -98,9 +98,9 @@ public class Processo implements IPessoa, Serializable{
 		StringBuilder sb = new StringBuilder();
 		sb.append("tribunal " + this.tribunal.getSigla() + " seção: " + this.tribunal.getSecao()
 				+ "\ndescricao: " + this.tribunal.getDescricao()); // court setting
-		sb.append("\nProcesso no. " + this.getNumero() + " | fase: " + this.fase + "\n");
-		sb.append("Cliente: "+this.cliente.list());
-		sb.append("\nParte Contraria: " + this.parteContraria.list());
+		sb.append("\nProcesso no. " + this.getNumero() + " \t fase: " + this.fase + "\t");
+		sb.append("Cliente: "+this.cliente.toString());
+		sb.append("\nParte Contraria: " + this.parteContraria.toString());
 		sb.append("\nAudiencias até agora: \n" + this.getAudiencias());
 		sb.append("cusots até agora: \n" + this.getCustas());
 		sb.append("custos totais: " + this.getTotalCustas() + '\n');
