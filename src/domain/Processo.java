@@ -6,6 +6,7 @@ import contracts.IPessoa;
 import enumerations.EFaseProcesso;
 
 public class Processo implements IPessoa, Serializable{
+	
 	private final String numero;
 	private final Date dataAbertura;
 	private final Tribunal tribunal;

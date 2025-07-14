@@ -46,6 +46,13 @@ public class PessoaFisicaView extends JFrame {
 		this.pessoaFisicaController = pfc;
 		initialize();
 	}
+	
+	public PessoaFisicaView(PessoaController pfc, String preencherID){
+		this.pessoaFisicaController = pfc;
+		initialize();
+		this.txtCpf.setText(preencherID);
+		this.actionBuscar();
+	}
 
 	private void initialize() {
 		this.setTitle("nova Pessoa Fisica");

@@ -23,14 +23,14 @@ class ProcessoView extends JFrame{
 	
 	private JPanel pnlFaseContainer;
 	private JLabel lblFase;
-	private JComboBox ddmFase;
+	private JComboBox<EFaseProcesso> ddmFase;
 	private String[4] dropdownOptions = {
 		"INICIAL", "INSTRUÇÃO", "DECISÃO", "RECURSO"
 	};
 	
 	private JPanel pnlDataContainer;
 	private JLabel lblData;
-	private JFormattedText txtData;
+	private JFormattedTextField txtData;
 	
 	private JPanel pnlRegistroClienteBuscar;
 	private JLabel lblRegistroCliente;
@@ -118,10 +118,12 @@ class ProcessoView extends JFrame{
 		pnlNumeroBuscar.add(txtNumero);
 		pnlNumeroBuscar.add(btnNumeroBuscar);
 		
+		ddmFase = new JComboBox<>(dropdownOptions);
+		
 		this.pnlDataContainer = new JPanel();
 		this.pnlDataContainer.setLayout(new FlowLayout());
 		this.lblData = new JLabel("Data");
-		this.txtData = new JFormattedText("dd-mm-aaaa");
+		this.txtData = new JFormattedTextField("dd-mm-aaaa");
 		
 		this.add(lblNumero, BorderLayout.WEST);
 		this.add(lblFase, BorderLayout.WEST);
@@ -205,12 +207,35 @@ class ProcessoView extends JFrame{
 		}
 	}
 	
+	protected void actionListarAudiencias() {
+		StringBuilder builder = new StringBuilder();
+		for (AudienciaDto dto : this.audienciaHandler) {
+			builder.append(dto.toString()).append("\n");
+		}
+		txtAudienciasLista.setText(builder.toString);
+	}
+	
+	protected void actionListarDespesas() {
+		StringBuilder builder = new StringBuilder();
+		for (DespesaDto dto : this.despesaHandler) {
+			builder.append(dto.toString()).append("\n");
+		}
+		txtAudienciasLista.setText(builder.toString);
+	}
+	
+	
 	private void actionBuscarPessoa(String registro) {
 		PessoaDto pessoa = pessoaController.getPessoa(registro);
-		if (pessoa != null) {
-			
-		} else {
-			
+		try{
+			Cpf c = new Cpf(registro);
+			PessoaFisicaView pfv = new PessoaFisicaView(MainController.getPessoaController(), registro);
+			pfv.setVisible(true);
+		}try{
+			Cnpj c = new Cnpj(registro);
+			PessoaJuridicaView pjv = new PessoaJuridicaView(MainController.getPessoaController(), registro);
+			pjv.setVisible(true);
+		}catch(Exception e){
+			JOptionPane.showMessageDialog(this, "isso não é um CPF nem um Cnpj, ou seja, não se encontraria em nossa base de dados nem se você quisesse.";
 		}
 	}
 	

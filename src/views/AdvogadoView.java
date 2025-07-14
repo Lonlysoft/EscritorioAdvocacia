@@ -41,7 +41,7 @@ public class AdvogadoView extends JFrame {
 	private JButton btnSalvar;
 	private JButton btnCancelar;
 
-	public PessoaFisicaView(PessoaController pfc) {
+	public AdvogadoView(PessoaController ac) {
 		this.advogadoController = ac;
 		initialize();
 	}
@@ -104,5 +104,52 @@ public class AdvogadoView extends JFrame {
 		this.add(pnlCpfBuscar);
 		this.add(pnlTxtFields);
 		this.add(pnlFooterContainer);
+	}
+	
+	private void actionBuscarRegistro(){
+		String registro;
+		AdvogadoDto dto;
+		PessoaFisicaDto dto2;
+		
+		registro = txtRegistro.getText();
+		
+		try {
+			dto = this.pessoaFisicaController.getAdvogado(registro);
+			dto2 = this.pessoaFisicaController.getPessoaFisica(dto.getCpf());
+			
+			txtCpf.setText(cpf);
+			txtNome.setText(dto.getNome());
+			txtTelefone.setText(dto.getTelefone());
+			txtEmail.setText(dto.getEmail());
+			
+		} catch (PessoaException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			//clear();
+		}	
+	}
+	private void actionSalvar(){
+		
+	}
+	private void actionCancelar(){
+		
+	}
+	private void actionBuscarPessoaFisica(){
+		String cpf;
+		PessoaFisicaDto dto;
+		
+		cpf = txtCpf.getText();
+		
+		try {
+			dto = this.pessoaFisicaController.getPessoaFisica(cpf);
+			
+			txtCpf.setText(cpf);
+			txtNome.setText(dto.getNome());
+			txtTelefone.setText(dto.getTelefone());
+			txtEmail.setText(dto.getEmail());
+			
+		} catch (PessoaException e) {
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			//clear();
+		}	
 	}
 }

@@ -28,6 +28,9 @@ public class AudienciaView extends JFrame {
 		setSize(500, 400);
 		setLayout(new BorderLayout());
 		
+		this.lblData = new JLabel("Data");
+		this.txtData = new JFormattedTextField(new SimpleDateFormat("dd-mm-yyyy"));
+		
 		JPanel pnlMain = new JPanel(new BorderLayout(2, 1, 10, 10));
 		pnlMain.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		

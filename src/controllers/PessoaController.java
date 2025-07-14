@@ -92,11 +92,11 @@ public class PessoaController implements Serializable {
 			throw new PessoaException("Já existe pessoa cadastrado para o registro: " + advDto.getRegistro());
 		}
 		
-		PessoaFisica pf = pessoasFisicas.get(advDto.getRegistro());
+		PessoaFisica pf = pessoasFisicas.get(advDto.getCpf());
 
 		Advogado adv = new Advogado(advDto.getNome(), pf);
 
-		advogados.put(adv.getCpf(), adv);
+		advogados.put(adv.getRegistro(), adv);
 		
 		MainController.save();
 	}
@@ -156,15 +156,13 @@ public class PessoaController implements Serializable {
 	}
 
 	public void updatePessoaJuridica(PessoaJuridicaDto pjDto) throws PessoaException, EmailException {
-
+		
 		PessoaJuridica pj = pessoasJuridicas.get(pjDto.getCnpj());
-
 		if (pj == null)
 			throw new PessoaException("Não tem pessoa cadastrado para o Cnpj: " + pjDto.getCnpj());
-
 		pj.setNome(pjDto.getNome());
 		pj.setEmail(pjDto.getEmail());
-
+		
 		MainController.save();
 	}
 

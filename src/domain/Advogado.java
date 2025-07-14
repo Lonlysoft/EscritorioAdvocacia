@@ -37,7 +37,7 @@ public class Advogado implements IPessoa, Serializable{
 	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append("advogado: " + this.pessoaFisica.getNome() + " | cadrastro: " + this.pessoaFisica.getCadastroRF() + " | email: "
+		sb.append("advogado: " + this.pessoaFisica.getNome() + " \t cadrastro: " + this.pessoaFisica.getCadastroRF() + " \t email: "
 				+ this.pessoaFisica.getEmail());
 		return sb.toString();
 	}

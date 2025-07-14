@@ -94,6 +94,7 @@ public class ProcessoController implements Serializable {
 
 		for (Processo p : processos.values()) {
 			pDto = new ProcessoDto(p.getNumero(), p.getCliente(), p.getParteContraria(), p.get());
+			
 			lista.add(pDto);
 		}
 
