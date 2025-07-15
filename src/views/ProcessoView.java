@@ -1,7 +1,7 @@
 package views;
 
 class ProcessoView extends JFrame{
-	private ProcessoController processoContolroller;
+	private ProcessoController processoController;
 	private ArrayList<AudienciaDto> audienciaHandler = new ArrayList<>();
 	private ArrayList<DespesaDto> despesaHandler = new ArrayList<>();
 	
@@ -24,9 +24,6 @@ class ProcessoView extends JFrame{
 	private JPanel pnlFaseContainer;
 	private JLabel lblFase;
 	private JComboBox<EFaseProcesso> ddmFase;
-	private String[4] dropdownOptions = {
-		"INICIAL", "INSTRUÇÃO", "DECISÃO", "RECURSO"
-	};
 	
 	private JPanel pnlDataContainer;
 	private JLabel lblData;
@@ -73,7 +70,6 @@ class ProcessoView extends JFrame{
 		txtNumero = new JTextField(11);
 		btnNumeroBuscar = new JButton("buscar");
 		
-		
 		btnNumeroBuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				actionBuscar();
@@ -118,12 +114,13 @@ class ProcessoView extends JFrame{
 		pnlNumeroBuscar.add(txtNumero);
 		pnlNumeroBuscar.add(btnNumeroBuscar);
 		
-		ddmFase = new JComboBox<>(dropdownOptions);
+		ddmFase = new JComboBox<>(EFaseProcesso.values());
+		lblFase = new JLabel("fase");
 		
-		this.pnlDataContainer = new JPanel();
-		this.pnlDataContainer.setLayout(new FlowLayout());
+		
 		this.lblData = new JLabel("Data");
-		this.txtData = new JFormattedTextField("dd-mm-aaaa");
+		this.txtData = new JFormattedTextField("dd-mm-yyyy");
+		
 		
 		this.add(lblNumero, BorderLayout.WEST);
 		this.add(lblFase, BorderLayout.WEST);
@@ -144,7 +141,7 @@ class ProcessoView extends JFrame{
 	
 	private void actionBuscar(){
 		String numero;
-		ProcessoDto pDto;
+		ProcessoDto dto;
 		
 		numero = txtNumero.getText();
 		
@@ -152,9 +149,13 @@ class ProcessoView extends JFrame{
 			dto = this.processoContolroller.getProcesso(numero);
 			txtData.setText(dto.getData());
 			ddmFase.setSelectedItem(dto.getFase());
+			txtTribunal.setText(dto.getTribunal());
 			txtNumero.setText(dto.getNumero());
 			txtRegistroCliente.setText(dto.getCliente());
 			txtRegistroParteContraria.setText(dto.getParteContraria());
+			this.audienciaHandler = dto.getAudiencias();
+			this.despesaHandler = dto.getDespesas();
+			txtAudienciasLista.setText(dto.getAudienciasToString);
 		}
 		catch(ProcessoException e){
 			JOptionPane.showMessageDialog(this, e.getMessage());
@@ -168,6 +169,7 @@ class ProcessoView extends JFrame{
 			dto.setNumero(txtNumero.getText());
 			dto.setFase(ddmFase.getSelectedItem().toString());
 			dto.setData(txtData.getText());
+			dto.setTribunal(txtTribunal.getText());
 			dto.setClienteRegistro(txtRegistroCliente.getText());
 			dto.setParteContrariaRegistro(txtRegistroParteContraria.getText());
 	
@@ -223,7 +225,6 @@ class ProcessoView extends JFrame{
 		txtAudienciasLista.setText(builder.toString);
 	}
 	
-	
 	private void actionBuscarPessoa(String registro) {
 		PessoaDto pessoa = pessoaController.getPessoa(registro);
 		try{
@@ -235,28 +236,36 @@ class ProcessoView extends JFrame{
 			PessoaJuridicaView pjv = new PessoaJuridicaView(MainController.getPessoaController(), registro);
 			pjv.setVisible(true);
 		}catch(Exception e){
-			JOptionPane.showMessageDialog(this, "isso não é um CPF nem um Cnpj, ou seja, não se encontraria em nossa base de dados nem se você quisesse.";
+			JOptionPane.showMessageDialog(this, "isso não é um CPF nem um Cnpj, ou seja, não se encontraria em nossa base de dados nem se você quisesse.");
 		}
 	}
 	
 	private void actionAdicionarDespesa(){
-		DespesaDto dto = new DespesaDto();
-		this.despesaHandler.add()
+		DespesaView dv = new DespesaView(processoController);
+		dv.setVisible(true);
 	}
 	
 	private void actionAdicionarAudiencia(){
-		AudienciaDto dto = new AudienciaDto();
-		this.AudienciaHandler.add()
+		AudienciaView av = new AudienciaView(processoController);
+		av.setVisible(true);
+	}
+	
+	private void actionResetAudiencias(){
+		txtAudienciasLista.setText("");
+		this.audienciaHandler = new ArrayList<>();
+	}
+	
+	private void actionResetDespesas(){
+		txtDespesasLista.setText("");
+		this.despesaHandler = new ArrayList<>();
 	}
 	
 	private void actionBuscarCliente(){
-		try{
-			
-		}
+		this.actionBuscarPessoa(txtRegistroCliente.getText());
 	}
 	
 	private void actionBuscarParteContraria(){
-		
+		this.actionBuscarPessoa(txtRegistroParteContraria.getText());
 	}
 	
 	private void clearInputs(){
@@ -267,11 +276,14 @@ class ProcessoView extends JFrame{
 		txtRegistroParteContraria.setText("");
 	}
 	
-	protected ArrayList<> getAudiencias(){
+	//não é não seguro pois isso é uma view
+	public ArrayList<> getAudiencias(){
 		return this.audienciaHandler;
 	}
 	
-	protected ArrayList<> getDespesas(){
+	public ArrayList<> getDespesas(){
 		return this.audienciaHandler;
 	}
+	
+	
 }

@@ -31,7 +31,12 @@ public class AdvogadoView extends JFrame {
 	private JTextField txtCpf;
 
 	private JButton btnBuscarCpf;
-
+	
+	private JLabel lblRegistro;
+	private JTextField txtRegistro;
+	
+	private JButton btnBuscarRegistro;
+	
 	private JLabel lblEmail;
 	private JTextField txtEmail;
 
@@ -44,6 +49,7 @@ public class AdvogadoView extends JFrame {
 	public AdvogadoView(PessoaController ac) {
 		this.advogadoController = ac;
 		initialize();
+		setupActionListeners();
 	}
 
 	private void initialize() {
@@ -106,6 +112,40 @@ public class AdvogadoView extends JFrame {
 		this.add(pnlFooterContainer);
 	}
 	
+	private void setupActionListeners(){
+		btnSalvar.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionSalvar();
+				}
+			}
+		);
+		
+		btnCancelar.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionCancelar();
+				}
+			}
+		);
+		
+		btnBuscarRegistro.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionBuscarRegistro();
+				}
+			}
+		);
+		
+		btnBuscarCpf.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionBuscarPessoaFisica();
+				}
+			}
+		);
+	}
+	
 	private void actionBuscarRegistro(){
 		String registro;
 		AdvogadoDto dto;
@@ -117,22 +157,19 @@ public class AdvogadoView extends JFrame {
 			dto = this.pessoaFisicaController.getAdvogado(registro);
 			dto2 = this.pessoaFisicaController.getPessoaFisica(dto.getCpf());
 			
-			txtCpf.setText(cpf);
-			txtNome.setText(dto.getNome());
-			txtTelefone.setText(dto.getTelefone());
-			txtEmail.setText(dto.getEmail());
+			
+			txtRegistro.setText(registro);
+			txtCpf.setText(dto2.getCpf());
+			txtNome.setText(dto2.getNome());
+			txtTelefone.setText(dto2.getTelefone());
+			txtEmail.setText(dto2.getEmail());
 			
 		} catch (PessoaException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			//clear();
 		}	
 	}
-	private void actionSalvar(){
-		
-	}
-	private void actionCancelar(){
-		
-	}
+	
 	private void actionBuscarPessoaFisica(){
 		String cpf;
 		PessoaFisicaDto dto;

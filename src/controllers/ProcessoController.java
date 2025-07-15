@@ -38,7 +38,7 @@ public class ProcessoController implements Serializable {
 		parteContrariaPf = pc.getPessoaFisica(pDto.getCadastroParteContraria());
 		parteContrariaPj = pc.getPessoaJuridica(pDto.getCadastroParteContraria());
 
-		Processo p = new Processo(pDto.getNumero(), pDto.getDataAbertura(), pDto.getFase(), (clientePf == null)? clientePj : clientePf, (parteContrariaPf == null)? parteContrariaPj : parteContrariaPf);
+		Processo p = new Processo(pDto.getNumero(), pDto.getDataAbertura(), tc.getTribunal(pDto.getTribunal()) pDto.getFase(), (clientePf == null)? clientePj : clientePf, (parteContrariaPf == null)? parteContrariaPj : parteContrariaPf);
 
 		processos.put(p.getNumero(), p);
 
@@ -56,33 +56,39 @@ public class ProcessoController implements Serializable {
 		p.addDespesa(dto.getData(), dto.getDescricao(), dto.getValor());
 	}
 	
-	public String getTotalCustasDeProcesso(String numero){
+	public double getTotalCustasDeProcesso(String numero){
 		Processo p = this.processos.get(numero);
 		return p.getTotalCustas();
 	}
 
-	public void updateProcesso(ProcessoDto ProcessoDto) throws ProcessoException {
+	public void updateProcesso(ProcessoDto pDto) throws ProcessoException {
 
-		Processo p = processos.get(ProcessoDto.getNumero());
+		Processo p = processos.get(pDto.getNumero());
 
-		if (p == null)
-			throw new ProcessoException("Não tem Processo cadastrado para o Numero: " + ProcessoDto.getNumero());
-
-		p.setNumero(p.getNumero());
-		p.setData(new Date(p.getData()));
-
+		if (p == null){
+			throw new ProcessoException("processo presente não encontrado novo processo criado");
+		}
+		p.setFase(p.getFase());
+		
+		TribunalController tc = MainController.getTribunalController();
+		p.setTribunal(tc.getTribunal(pDto.getTribunal()));
+		
+		p.setCliente();
+		p.setParteContraria();
 		MainController.save();
 	}
+	
+	
 
 	public ProcessoDto getProcesso(String numero) throws ProcessoException {
 
 		Processo p = processos.get(numero);
 
 		if (p == null)
-			throw new ProcessoException("Não tem Processo cadastrado para a sigla: " + sigla);
-
-		ProcessoDto pDto = new ProcessoDto(p.getNumero(), p.getData(), p.getFase(), p.getSiglaTribunal(), p.getCliente(), p.getParteContraria);
-
+			throw new ProcessoException("Não tem Processo cadastrado para o numero: " + numero);
+		ProcessoDto pDto = new ProcessoDto(p.getNumero(), p.getData(), p.getSiglaTribunal(), p.getFase(), p.getCliente(), p.getParteContraria);
+		
+		
 		return pDto;
 	}
 
@@ -94,6 +100,12 @@ public class ProcessoController implements Serializable {
 
 		for (Processo p : processos.values()) {
 			pDto = new ProcessoDto(p.getNumero(), p.getCliente(), p.getParteContraria(), p.get());
+			ArrayList<Audiencia> la = p.getAudiencias();
+			ArrayList<Despesa> ld = p.getDespesas();
+			for(Audiencia i : la){
+				AudienciaDto dto = new AudienciaDto(i.getData(), i.getRecomendacao(), i.getRegistroAdvogado())
+				pDto.addAudiencia()
+			}
 			
 			lista.add(pDto);
 		}

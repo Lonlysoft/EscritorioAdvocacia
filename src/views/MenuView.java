@@ -17,7 +17,7 @@ public class MenuView extends JFrame {
 	
 	private JButton btnTribunal;
 	private JButton btnProcesso;
-	private JButton btnPessoa;
+	private JButton btnAdvogado;
 	private JToggleButton btnListas;
 	private JPanel pnlListas;
 	private JTextArea txtForLists;
@@ -48,11 +48,11 @@ public class MenuView extends JFrame {
 		btnProcesso.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent e){
-					//actionProcesso();
+					actionProcesso();
 				}
 			}
 		);
-		btnAdvogado = new JButton("pessoa");
+		btnAdvogado = new JButton("advogado");
 		btnAdvogado.addActionListener(
 			new ActionListener() {
 				public void actionPerformed(ActionEvent e) {

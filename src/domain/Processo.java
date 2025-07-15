@@ -13,7 +13,7 @@ public class Processo implements IPessoa, Serializable{
 	private EFaseProcesso fase;
 	private final ArrayList<Audiencia> audiencias = new ArrayList<Audiencia>();
 	private final ArrayList<Despesa> custas = new ArrayList<Despesa>();
-	private final IPessoa cliente, parteContraria;
+	private IPessoa cliente, parteContraria;
 
 	public Processo(String numero, Date dataAbertura, Tribunal tribunal, EFaseProcesso fase, IPessoa cliente,
 			IPessoa parteContraria) throws ProcessoException{
@@ -70,19 +70,37 @@ public class Processo implements IPessoa, Serializable{
 	public void addDespesa(Date data, String descricao, double valor) {
 		this.custas.add(new Despesa(data, descricao, valor));
 	}
+	
+	public ArrayList<Audiencia> getAudiencias(){
+		ArrayList<Audiencia> l;
+		for (Audiencia i : this.audiencias) {
+			l.add(new Audiencia(i.getData(), i.getRecomendacao(), i.getAdvogado()));
+		}
+		return l;
+	}
+	
+	public ArrayList<Despesa> getDespesas(){
 
-	public String getAudiencias() {
+		ArrayList<Despesa> l;
+
+		for (Despesa i : this.despesas) {
+			l.add(new Despesa(i.getData, i.getDescricao(), i.getValor()));
+		}
+		return l;
+	}
+
+	public String getAudienciasToString() {
 		StringBuilder sb = new StringBuilder();
 		for (Audiencia i : this.audiencias) {
-			sb.append("" + i.list()+ "\n");
+			sb.append("" + i.toString()+ "\n");
 		}
 		return sb.toString();
 	}
 
-	public String getCustas() {
+	public String getCustasToString() {
 		StringBuilder sb = new StringBuilder();
 		for (Despesa i : this.custas) {
-			sb.append(i.list() + "\n");
+			sb.append(i.toString() + "\n");
 		}
 		return sb.toString();
 	}

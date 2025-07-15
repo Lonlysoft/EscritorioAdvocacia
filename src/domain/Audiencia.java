@@ -24,6 +24,10 @@ public class Audiencia {
 		return advogado;
 	}
 	
+	public String getRegistroAdvogado(){
+		return advogado.getRegistro();
+	}
+	
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("data: " + this.getData() + " | recomendacao: " + this.getRecomendacao());
