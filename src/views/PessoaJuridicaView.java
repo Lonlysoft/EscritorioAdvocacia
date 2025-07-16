@@ -20,10 +20,6 @@ public class PessoaFisicaView extends JFrame {
 
 	private JPanel pnlCpfBuscar;
 	private JPanel pnlCnpjBuscar;
-	private JPanel pnlTxtFields;
-	private JPanel pnlNomeContainer;
-	private JPanel pnlEmailContainer;
-	private JPanel pnlTelefoneContainer;
 	private JPanel pnlFooterContainer;
 	
 	private JLabel lblCnpj;
@@ -38,7 +34,6 @@ public class PessoaFisicaView extends JFrame {
 	
 	private JLabel lblCpfPreposto;
 	private JTextField txtCpfPreposto;
-
 	private JButton btnBuscarCpf;
 
 	private JLabel lblEmail;
@@ -50,7 +45,7 @@ public class PessoaFisicaView extends JFrame {
 	private JButton btnSalvar;
 	private JButton btnCancelar;
 
-	public PessoaFisicaView(PessoaController pfc) {
+	public PessoaJuridicaView(PessoaController pfc) {
 		this.pessoaFisicaController = pfc;
 		initialize();
 	}
@@ -60,7 +55,7 @@ public class PessoaFisicaView extends JFrame {
 		this.setMinimumSize(new Dimension(300, 200));
 		this.setSize(400, 300);
 		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setLayout(new GridLayout(3, 1));
+		this.setLayout(new BorderLayout());
 
 		this.lblCpf = new JLabel("CPF");
 		this.txtCpf = new JTextField(12);
@@ -129,7 +124,6 @@ public class PessoaFisicaView extends JFrame {
 		this.add(pnlCnpjBuscar);
 		this.add(pnlTxtFields);
 		this.add(pnlFooterContainer);
-		this.add(lblPrepostoSpan);
 		this.add(pnlCpfBuscar);
 	}
 	

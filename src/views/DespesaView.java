@@ -13,7 +13,7 @@ import javax.swing.JTextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class AudienciaView extends JFrame {
+public class DespesaView extends JFrame {
 	private ProcessoController processoCtrl;
 	private ProcessoView processoView;
 	private JPanel pnlLabelTextRecomendacao;
@@ -26,7 +26,7 @@ public class AudienciaView extends JFrame {
 	private JButton btnSalvar;
 	private JButton btnCancelar;
 
-	public AudienciaView(ProcessoView view) {
+	public DespesaView(ProcessoView view) {
 		this.processoView = view;
 		initialize();
 		setupActions();
@@ -75,7 +75,7 @@ public class AudienciaView extends JFrame {
 	private void setupActions() {
 		btnSalvar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				actionSalvarAudiencia();
+				actionSalvarDespesa();
 			}
 		});
 
@@ -92,9 +92,9 @@ public class AudienciaView extends JFrame {
 		});
 	}
 
-	private void salvarAudiencia() {
-		ArrayList<AudienciaDto> arr = view.getAudiencias();
-		AudienciaDto dto = new AudienciaDto(txtRecomendacao.getText(), txtValor.getText());
+	private void salvarDespesa() {
+		ArrayList<DespesaDto> arr = view.getDespesas();
+		DespesaDto dto = new DespesaDto(txtRecomendacao.getText(), txtValor.getText());
 		arr.add(dto);
 		this.dispose();
 		limparCampos();

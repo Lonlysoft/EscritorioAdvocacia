@@ -72,7 +72,21 @@ public class PessoaFisicaView extends JFrame {
 				}
 			}
 		);
-		
+		btnCancelar.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionCancelar();
+				}
+			}
+				);
+		btnSalvar.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(){
+					actionSalvar();
+				}
+			}
+		);
+						
 		this.pnlCpfBuscar = new JPanel();
 		this.pnlCpfBuscar.setLayout(new FlowLayout());
 
@@ -110,7 +124,9 @@ public class PessoaFisicaView extends JFrame {
 		this.pnlTelefoneContainer.add(this.txtTelefone);
 
 		this.pnlFooterContainer = new JPanel();
-
+		
+		this.btnCancelar = new JButton("cancelar");
+		this.btnSalvar = new JButton("salvar");
 		this.pnlFooterContainer.add(this.btnCancelar);
 		this.pnlFooterContainer.add(this.btnSalvar);
 		
@@ -161,6 +177,19 @@ public class PessoaFisicaView extends JFrame {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			//clear();
 		}	
+	}
+	
+	private void actionCancelar() {
+		int confirm = JOptionPane.showConfirmDialog(
+			this, 
+			"Deseja realmente cancelar? Todas as alterações serão perdidas.", 
+			"Confirmar Cancelamento", 
+			JOptionPane.YES_NO_OPTION);
+			
+		if (confirm == JOptionPane.YES_OPTION) {
+			limparCampos();
+			this.dispose();
+		}
 	}
 	
 	public void clear(){
