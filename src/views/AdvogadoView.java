@@ -3,17 +3,21 @@ package views;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import dtos.AdvogadoDto;
+import dtos.PessoaFisicaDto;
+import javax.swing.*;
 
+import exceptions.PessoaException;
+import exceptions.CpfException;
+import exceptions.EmailException;
 import controllers.PessoaController;
 
 public class AdvogadoView extends JFrame {
-
+	private static final long serialVersionUID = -2953679038290235L;
+	
 	private PessoaController advogadoController;
 
 	private JPanel pnlCpfBuscar;
@@ -102,7 +106,7 @@ public class AdvogadoView extends JFrame {
 		
 		this.pnlTxtFields = new JPanel();
 		
-		this.pnlTxtFields.add(pnlCpfContainer)
+		this.pnlTxtFields.add(pnlCpfBuscar);
 		this.pnlTxtFields.add(pnlNomeContainer);
 		this.pnlTxtFields.add(pnlEmailContainer);
 		this.pnlTxtFields.add(pnlTelefoneContainer);
@@ -115,7 +119,7 @@ public class AdvogadoView extends JFrame {
 	private void setupActionListeners(){
 		btnSalvar.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionSalvar();
 				}
 			}
@@ -123,7 +127,7 @@ public class AdvogadoView extends JFrame {
 		
 		btnCancelar.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionCancelar();
 				}
 			}
@@ -131,7 +135,7 @@ public class AdvogadoView extends JFrame {
 		
 		btnBuscarRegistro.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionBuscarRegistro();
 				}
 			}
@@ -139,11 +143,34 @@ public class AdvogadoView extends JFrame {
 		
 		btnBuscarCpf.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionBuscarPessoaFisica();
 				}
 			}
 		);
+	}
+	
+	private void actionSalvar(){
+		AdvogadoDto dto = new AdvogadoDto(txtRegistro.getText(), txtCpf.getText());
+		PessoaFisicaDto dto2 = new PessoaFisicaDto(
+			this.txtNome.getText(),
+			this.txtTelefone.getText(),
+			this.txtEmail.getText(),
+			this.txtCpf.getText()
+		);
+		
+		try{
+			this.advogadoController.createPessoaFisica(dto2);
+			this.advogadoController.createAdvogado(dto);
+			JOptionPane.showMessageDialog(this, "Advogado gravado com sucesso!");
+		} catch(PessoaException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			this.clear();
+		} catch(CpfException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		} catch(EmailException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
+		} 
 	}
 	
 	private void actionBuscarRegistro(){
@@ -154,8 +181,8 @@ public class AdvogadoView extends JFrame {
 		registro = txtRegistro.getText();
 		
 		try {
-			dto = this.pessoaFisicaController.getAdvogado(registro);
-			dto2 = this.pessoaFisicaController.getPessoaFisica(dto.getCpf());
+			dto = this.advogadoController.getAdvogado(registro);
+			dto2 = this.advogadoController.getPessoaFisica(dto.getCpf());
 			
 			
 			txtRegistro.setText(registro);
@@ -167,7 +194,7 @@ public class AdvogadoView extends JFrame {
 		} catch (PessoaException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			//clear();
-		}	
+		}
 	}
 	
 	private void actionBuscarPessoaFisica(){
@@ -177,7 +204,7 @@ public class AdvogadoView extends JFrame {
 		cpf = txtCpf.getText();
 		
 		try {
-			dto = this.pessoaFisicaController.getPessoaFisica(cpf);
+			dto = this.advogadoController.getPessoaFisica(cpf);
 			
 			txtCpf.setText(cpf);
 			txtNome.setText(dto.getNome());
@@ -186,7 +213,28 @@ public class AdvogadoView extends JFrame {
 			
 		} catch (PessoaException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
-			//clear();
-		}	
+			clear();
+		} 
 	}
+	
+	private void actionCancelar() {
+		int confirm = JOptionPane.showConfirmDialog(
+			this, 
+			"Deseja realmente cancelar? Todas as alterações serão perdidas.", 
+			"Confirmar Cancelamento", 
+			JOptionPane.YES_NO_OPTION);
+			
+		if (confirm == JOptionPane.YES_OPTION) {
+			clear();
+			this.dispose();
+		}
+	}
+	 
+	public void clear(){
+		this.txtNome.setText("");
+		this.txtCpf.setText("");
+		this.txtTelefone.setText("");
+		this.txtEmail.setText("");
+	}
+	
 }

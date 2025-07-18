@@ -1,14 +1,13 @@
 package controllers;
 
+import domain.Tribunal;
+import dtos.TribunalDto;
+import exceptions.TribunalException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import domain.Tribunal;
-import dtos.TribunalDto;
-import exceptions.TribunalException;
 
 public class TribunalController implements Serializable {
 

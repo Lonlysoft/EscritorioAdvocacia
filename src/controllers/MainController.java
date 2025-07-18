@@ -1,12 +1,8 @@
 package controllers;
 
 import java.io.Serializable;
-
 import persistence.Serializer;
 
-/* 
- * Design Pattern Singleton 
- */
 public class MainController implements Serializable {
 
 	private static final long serialVersionUID = 3326741752317644589L;
@@ -35,20 +31,8 @@ public class MainController implements Serializable {
 		return instance.tribunalController;
 	}
 	
-	public static AdvogadoController getAdvogadoController() {
-		return instance.advogadoController;
-	}
-	
-	public static DespesaController getDespesaController() {
-		return instance.despesaController;
-	}
-	
-	public static PessoaFisicaController getPessoaFisicaController() {
-		return instance.pessoaFisicaController;
-	}
-	
-	public static PessoaJuridicaController getPessoaJuridicaController() {
-		return instance.pessoaJuridicaController;
+	public static PessoaController getPessoaController() {
+		return instance.pessoaController;
 	}
 	
 	public static ProcessoController getProcessoController() {

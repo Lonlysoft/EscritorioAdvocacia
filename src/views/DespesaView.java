@@ -1,22 +1,26 @@
 package views;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
+import java.awt.*;
 
-import javax.swing.JButton;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
+import java.util.Date;
+import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import controllers.ProcessoController;
+import dtos.*;
 
 public class DespesaView extends JFrame {
+	
+	private static final long serialVersionUID = -398354756346235L;
+	
 	private ProcessoController processoCtrl;
 	private ProcessoView processoView;
 	private JPanel pnlLabelTextRecomendacao;
+	private JLabel lblData;
+	private JFormattedTextField txtData;
 	private JPanel pnlLabelTextValor;
 	private JLabel lblRecomendacao;
 	private JLabel lblValor;
@@ -26,7 +30,8 @@ public class DespesaView extends JFrame {
 	private JButton btnSalvar;
 	private JButton btnCancelar;
 
-	public DespesaView(ProcessoView view) {
+	public DespesaView(ProcessoController pCtrl, ProcessoView view) {
+		this.processoCtrl = pCtrl;
 		this.processoView = view;
 		initialize();
 		setupActions();
@@ -41,7 +46,7 @@ public class DespesaView extends JFrame {
 		this.lblData = new JLabel("Data");
 		this.txtData = new JFormattedTextField(new SimpleDateFormat("dd-mm-yyyy"));
 		
-		JPanel pnlMain = new JPanel(new BorderLayout(2, 1, 10, 10));
+		JPanel pnlMain = new JPanel(new BorderLayout());
 		pnlMain.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		pnlLabelTextValor = new JPanel(new BorderLayout(5, 5));
@@ -92,9 +97,9 @@ public class DespesaView extends JFrame {
 		});
 	}
 
-	private void salvarDespesa() {
-		ArrayList<DespesaDto> arr = view.getDespesas();
-		DespesaDto dto = new DespesaDto(txtRecomendacao.getText(), txtValor.getText());
+	private void actionSalvarDespesa() {
+		ArrayList<DespesaDto> arr = processoView.getDespesas();
+		DespesaDto dto = new DespesaDto(new Date(txtData.getText()), txtRecomendacao.getText(), Double.parseDouble(txtValor.getText()));
 		arr.add(dto);
 		this.dispose();
 		limparCampos();

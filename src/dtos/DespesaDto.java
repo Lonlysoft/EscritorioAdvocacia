@@ -1,5 +1,12 @@
+package dtos;
+
+import java.util.Date;
+
 public class DespesaDto{
-  public Despesa(Date data, String descricao, double valor) {
+	private Date data;
+	private String descricao;
+	private double valor;
+	public DespesaDto(Date data, String descricao, double valor) {
 		this.data = data;
 		this.descricao = descricao;
 		this.valor = valor;

@@ -1,9 +1,19 @@
+package views;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import controllers.MainController;
+import controllers.ProcessoController;
+import dtos.AudienciaDto;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
 
 public class AudienciaView extends JFrame {
+	private static final long serialVersionUID = -194625842590731595L;
+	
 	private ProcessoController processoCtrl;
 	private ProcessoView processoView;
 	private JPanel pnlLabelTextRecomendacao;
@@ -15,8 +25,12 @@ public class AudienciaView extends JFrame {
 	private JPanel pnlFooterSalvarCancelar;
 	private JButton btnSalvar;
 	private JButton btnCancelar;
+	private JPanel pnlDataContainer;
+	private JLabel lblData;
+	private JFormattedTextField txtData;
 
-	public AudienciaView(ProcessoView view) {
+	public AudienciaView(ProcessoController pCtrl, ProcessoView view) {
+		this.processoCtrl = pCtrl;
 		this.processoView = view;
 		initialize();
 		setupActions();
@@ -24,14 +38,14 @@ public class AudienciaView extends JFrame {
 
 	private void initialize() {
 		setTitle("Registrar audiência");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		setSize(500, 400);
 		setLayout(new BorderLayout());
 		
 		this.lblData = new JLabel("Data");
 		this.txtData = new JFormattedTextField(new SimpleDateFormat("dd-mm-yyyy"));
 		
-		JPanel pnlMain = new JPanel(new BorderLayout(2, 1, 10, 10));
+		JPanel pnlMain = new JPanel(new GridLayout(2, 1, 10, 10));
 		pnlMain.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 		
 		pnlLabelTextAdvogado = new JPanel(new BorderLayout(5, 5));
@@ -82,9 +96,9 @@ public class AudienciaView extends JFrame {
 		});
 	}
 
-	private void salvarAudiencia() {
-		ArrayList<AudienciaDto> arr = view.getAudiencias();
-		AudienciaDto dto = new AudienciaDto(txtRecomendacao.getText(), txtAdvogado.getText());
+	private void actionSalvarAudiencia() {
+		ArrayList<AudienciaDto> arr = processoView.getAudiencias();
+		AudienciaDto dto = new AudienciaDto(new Date(txtData.getText()), txtRecomendacao.getText(), txtAdvogado.getText());
 		arr.add(dto);
 		this.dispose();
 		limparCampos();

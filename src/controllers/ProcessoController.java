@@ -1,15 +1,21 @@
 package controllers;
 
+import domain.*;
+import dtos.ProcessoDto;
+import dtos.AdvogadoDto;
+import dtos.PessoaFisicaDto;
+import dtos.AudienciaDto;
+import dtos.PessoaJuridicaDto;
+import dtos.DespesaDto;
+import dtos.TribunalDto;
+import exceptions.*;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
-
-import domain.Processo;
-import dtos.ProcessoDto;
-import exceptions.ProcessoException;
+import contracts.IPessoa;
+import shared.*;
 
 public class ProcessoController implements Serializable {
 
@@ -21,33 +27,61 @@ public class ProcessoController implements Serializable {
 		processos = new TreeMap<>();
 	}
 
-	public void createProcesso(ProcessoDto pDto) throws ProcessoException {
-
+	public void createProcesso(ProcessoDto pDto) throws ProcessoException, PessoaException, TribunalException {
 		if (processos.get(pDto.getNumero()) != null) {
 			throw new ProcessoException("Já existe Processo cadastrado para o Numero: " + pDto.getNumero());
 		}
 		
 		PessoaController pc = MainController.getPessoaController();
-		
 		TribunalController tc = MainController.getTribunalController();
-		PessoaFisicaDto clientePf = null;
-		PessoaJuridicaDto clientePj = null;
-		clientePf = pc.getPessoaFisica(pDto.getCadastroRF());
-		clientePj = pc.getPessoaJuridica(pDto.getCadastroRF());
 		
-		parteContrariaPf = pc.getPessoaFisica(pDto.getCadastroParteContraria());
-		parteContrariaPj = pc.getPessoaJuridica(pDto.getCadastroParteContraria());
-
-		Processo p = new Processo(pDto.getNumero(), pDto.getDataAbertura(), tc.getTribunal(pDto.getTribunal()) pDto.getFase(), (clientePf == null)? clientePj : clientePf, (parteContrariaPf == null)? parteContrariaPj : parteContrariaPf);
+		IPessoa cliente = (IPessoa) pc.getPessoaFisica(pDto.getCliente());
+		if (cliente == null) {
+			cliente = (IPessoa) pc.getPessoaJuridica(pDto.getCliente());
+		}
+		
+		IPessoa parteContraria = (IPessoa) pc.getPessoaFisica(pDto.getParteContraria());
+		if (parteContraria == null) {
+			parteContraria = (IPessoa) pc.getPessoaJuridica(pDto.getParteContraria());
+		}
+		
+		if (cliente == null || parteContraria == null) {
+			throw new ProcessoException("Cliente ou Parte Contrária não encontrados no sistema");
+		}
+		
+		TribunalDto td = tc.getTribunal(pDto.getTribunal());
+		if (td == null) {
+			throw new ProcessoException("Tribunal não encontrado");
+		}
+		
+		Tribunal tri = new Tribunal(td.getSigla(), td.getNome(), td.getSecao());
+		
+		Processo p = new Processo(
+			pDto.getNumero(),
+			pDto.getDataAbertura(),
+			tri, 
+			pDto.getFase(),
+			cliente,
+			parteContraria);
 
 		processos.put(p.getNumero(), p);
-
 		MainController.save();
 	}
 	
-	public void addAudienciaToProcesso(String numProcesso, AudienciaDto audienciaDto){
+	public void deleteProcesso(String numero) throws ProcessoException {
+		if (processos.remove(numero) == null) {
+			throw new ProcessoException("Processo não encontrado para o número: " + numero);
+		}
+		MainController.save();
+	}
+	
+	public void addAudienciaToProcesso(String numProcesso, AudienciaDto audienciaDto) throws PessoaException, EmailException, CpfException{
+		PessoaController pc = MainController.getPessoaController();
 		Processo p = processos.get(numProcesso);
-		Advogado a = pessoaController.getAdvogado(audienciaDto.getAdvogado());
+		AdvogadoDto ad = pc.getAdvogado(audienciaDto.getAdvogado());
+		PessoaFisicaDto pfDto = pc.getPessoaFisica(ad.getCpf());
+		PessoaFisica pf = new PessoaFisica(pfDto.getNome(), new Email(pfDto.getEmail()), pfDto.getTelefone(), new Cpf(pfDto.getCpf()));
+		Advogado a = new Advogado(pf, ad.getRegistro());
 		p.addAudiencia(audienciaDto.getData(), audienciaDto.getRecomendacao(), a);
 	}
 	
@@ -61,50 +95,52 @@ public class ProcessoController implements Serializable {
 		return p.getTotalCustas();
 	}
 
-	public void updateProcesso(ProcessoDto pDto) throws ProcessoException {
-
+	public void updateProcesso(ProcessoDto pDto) throws ProcessoException, TribunalException{
 		Processo p = processos.get(pDto.getNumero());
 
 		if (p == null){
-			throw new ProcessoException("processo presente não encontrado novo processo criado");
+			throw new ProcessoException("Processo não encontrado");
 		}
 		p.setFase(p.getFase());
 		
 		TribunalController tc = MainController.getTribunalController();
-		p.setTribunal(tc.getTribunal(pDto.getTribunal()));
+		TribunalDto td = tc.getTribunal(pDto.getTribunal());
+		Tribunal tri = new Tribunal(td.getSigla(), td.getNome(), td.getSecao());
+		p.setTribunal(tri);
 		
-		p.setCliente();
-		p.setParteContraria();
 		MainController.save();
 	}
 	
-	
+	public void removeProcesso(String num){
+		processos.remove(num);
+		MainController.save();
+	}
 
 	public ProcessoDto getProcesso(String numero) throws ProcessoException {
-
 		Processo p = processos.get(numero);
 
 		if (p == null)
 			throw new ProcessoException("Não tem Processo cadastrado para o numero: " + numero);
-		ProcessoDto pDto = new ProcessoDto(p.getNumero(), p.getData(), p.getSiglaTribunal(), p.getFase(), p.getCliente(), p.getParteContraria);
-		
+		ProcessoDto pDto = new ProcessoDto(p.getNumero(), p.getDataAbertura(), p.getTribunal().getSigla(), p.getFase(), p.getCliente().getCadastroRF(), p.getParteContraria().getCadastroRF());
 		
 		return pDto;
 	}
 
-	public List<ProcessoDto> getprocessos() {
-
+	public List<ProcessoDto> getProcessos() {
 		List<ProcessoDto> lista = new ArrayList<>();
 
 		ProcessoDto pDto;
 
 		for (Processo p : processos.values()) {
-			pDto = new ProcessoDto(p.getNumero(), p.getCliente(), p.getParteContraria(), p.get());
+			pDto = new ProcessoDto(p.getNumero(), p.getDataAbertura(), p.getTribunal().getSigla(), p.getFase(), p.getCliente().getCadastroRF(), p.getParteContraria().getCadastroRF(), p.toString());
 			ArrayList<Audiencia> la = p.getAudiencias();
-			ArrayList<Despesa> ld = p.getDespesas();
+			ArrayList<Despesa> ld = p.getCustas();
 			for(Audiencia i : la){
-				AudienciaDto dto = new AudienciaDto(i.getData(), i.getRecomendacao(), i.getRegistroAdvogado())
-				pDto.addAudiencia()
+				pDto.addAudiencia(i.getData(), i.getRecomendacao(), i.getRegistroAdvogado());
+			}
+			
+			for(Despesa i : ld){
+				pDto.addDespesa(i.getData(), i.getDescricao(), i.getValor());
 			}
 			
 			lista.add(pDto);
@@ -112,5 +148,4 @@ public class ProcessoController implements Serializable {
 
 		return lista;
 	}
-
 }

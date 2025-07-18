@@ -9,8 +9,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.JOptionPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.border.Border;
 
 import controllers.PessoaController;
+import exceptions.*;
+import dtos.PessoaFisicaDto;
 
 public class PessoaFisicaView extends JFrame {
 
@@ -67,21 +73,21 @@ public class PessoaFisicaView extends JFrame {
 		
 		btnBuscarCpf.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionBuscar();
 				}
 			}
 		);
 		btnCancelar.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionCancelar();
 				}
 			}
 				);
 		btnSalvar.addActionListener(
 			new ActionListener(){
-				public void actionPerformed(){
+				public void actionPerformed(ActionEvent e) {
 					actionSalvar();
 				}
 			}
@@ -141,7 +147,7 @@ public class PessoaFisicaView extends JFrame {
 		this.add(this.pnlFooterContainer);
 	}
 	
-	private void actionRegistrar(){
+	private void actionSalvar(){
 		PessoaFisicaDto dto = new PessoaFisicaDto(
 			this.txtNome.getText(),
 			this.txtTelefone.getText(),
@@ -153,7 +159,13 @@ public class PessoaFisicaView extends JFrame {
 			this.pessoaFisicaController.createPessoaFisica(dto);
 			JOptionPane.showMessageDialog(this, "Pessoa Fisica gravada com sucesso!");
 		} catch(PessoaException e){
-			JWarningPane.showMessageDialog(this, e.getMessage());
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			
+		} catch(CpfException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
+			
+		} catch(EmailException e){
+			JOptionPane.showMessageDialog(this, e.getMessage());
 			this.clear();
 		}
 	}
@@ -176,7 +188,7 @@ public class PessoaFisicaView extends JFrame {
 		} catch (PessoaException e) {
 			JOptionPane.showMessageDialog(this, e.getMessage());
 			//clear();
-		}	
+		}
 	}
 	
 	private void actionCancelar() {
@@ -187,7 +199,7 @@ public class PessoaFisicaView extends JFrame {
 			JOptionPane.YES_NO_OPTION);
 			
 		if (confirm == JOptionPane.YES_OPTION) {
-			limparCampos();
+			clear();
 			this.dispose();
 		}
 	}
@@ -197,6 +209,10 @@ public class PessoaFisicaView extends JFrame {
 		this.txtCpf.setText("");
 		this.txtTelefone.setText("");
 		this.txtEmail.setText("");
+	}
+	
+	public void setCpf(String cpf){
+		txtCpf.setText(cpf);
 	}
 	
 }

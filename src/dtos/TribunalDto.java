@@ -1,3 +1,5 @@
+package dtos;
+
 public class TribunalDto{
 	private String sigla;
 	private String nome;
@@ -8,5 +10,15 @@ public class TribunalDto{
 		this.nome = nome;
 		this.secao = secao;
 	}
-	
+	public String getSigla() {
+		return sigla;
+	}
+
+	public String getNome() {
+		return nome;
+	}
+
+	public String getSecao() {
+		return secao;
+	}
 }
